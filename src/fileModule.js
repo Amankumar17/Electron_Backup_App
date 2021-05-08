@@ -7,14 +7,19 @@ const fs = require('fs');
 // Importing dialog module using remote
 const dialog = electron.remote.dialog;
 
-var uploadFile = document.getElementById('save');
+var uploadFile = document.getElementById('fle');
 
 // Defining a Global file path Variable to store
 // user-selected file
 global.filepath = undefined;
 
-uploadFile.addEventListener('click', () => {
+uploadFile.addEventListener('change', () => {
 // If the platform is 'win32' or 'Linux'
+
+	var fl = document.getElementById("fle").files[0];
+	console.log("fle",fl.path,fl);
+	
+
 	if (process.platform !== 'darwin') {
 		// Resolves to a Promise<Object>
 		dialog.showOpenDialog({

@@ -6,6 +6,9 @@ const dialog = electron.remote.dialog;
 
 var save = document.getElementById('save');
 
+const DIRECTORY_WIN=`C:\\electronProject`
+    
+
 save.addEventListener('click', (event) => {
 	// Resolves to a Promise<Object>
 	dialog.showSaveDialog({
@@ -40,6 +43,41 @@ save.addEventListener('click', (event) => {
 	});
 });
 
+function getCurrentFilenames() {
+	console.log("\nCurrent filenames:");
+	fs.readdirSync(__dirname).forEach(file => {
+	  console.log(file);
+	});
+	console.log("\n");
+  }
 
+function logdata()
+	{
+		var log = document.getElementById("logs").value;
+
+		console.log("fnc Log: ",log);
+
+		getCurrentFilenames();
+
+		
+		
+		// Check if the file exists
+		let fileExists = fs.existsSync('logs.xlsx');
+		console.log("logs.xlsx exists:", fileExists);
+		
+		// If the file does not exist
+		if (!fileExists) {
+		console.log("Creating the file")
+		fs.writeFileSync("logs.xlsx", "Hello World");
+		}
+		
+		// Get the current filenames
+		getCurrentFilenames();
+		
+		// Check if the file exists again
+		fileExists = fs.existsSync('logs.xlsx');
+		console.log("logs.xlsx exists:", fileExists);
+		
+	}
 
 // ...

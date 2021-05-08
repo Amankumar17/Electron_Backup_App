@@ -1,40 +1,96 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<title>Hello World!</title>
-	<!-- https://electronjs.org/docs/tutorial
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World!</title>
+    <!-- https://electronjs.org/docs/tutorial
 						/security#csp-meta-tag -->
-	<meta http-equiv="Content-Security-Policy"
-		content="script-src 'self' 'unsafe-inline';" />
-</head>
-<body>
-	<h1>Hello World!</h1>
-	We are using node
-	<script>
-		document.write(process.versions.node)
-	</script>, Chrome
-	<script>
-		document.write(process.versions.chrome)
-	</script>, and Electron
-	<script>
-		document.write(process.versions.electron)
-	</script>.
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline';"
+    />
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using node
+    <script>
+      document.write(process.versions.node);
+    </script>
+    , Chrome
+    <script>
+      document.write(process.versions.chrome);
+    </script>
+    , and Electron
+    <script>
+      document.write(process.versions.electron);
+    </script>
+    .
 
-	<br><br>
-	<button id="upFile">Upload</button>
-	<input type="file" id="fle" value="inputFile"/>
+    <br /><br />
+    <button id="upFile">Upload</button>
+    <input type="file" id="fle" />
 
-	<button id="save">Save sample.txt to local System</button>
-	
-	<script>
-		var fd = document.getElementById("fle");
-		fd.addEventListener('click', () => {
-			console.log("fle:", document.getElementById("fle").files);
-		})
-	</script>
-	<script src="./fileModule.js"></script>
-	<!-- Adding Individual Renderer Process JS File -->
-	<!-- <script src="./index.js"></script> -->
-</body>
+    <button id="save">Save sample.txt to local System</button>
+
+    <br />
+
+    <input type="text" id="logs" />
+    <button type="button" value="Log Data" id="logbtn" onclick="logdata()">
+      Log Data
+    </button>
+
+    <br />
+    <br />
+    <input type="text" id="folderName" placeholder="Enter folder name" />
+
+    <input type="text" id="log" placeholder="Enter log" />
+
+    <input type="datetime-local" id="currdate" />
+
+    <button onclick="addLogs()">Add log</button>
+    <script>
+		var createDirectory=(dir)=>{
+            console.log("Creating :",dir)
+            if (!fs.existsSync(dir)){
+                fs.mkdirSync(dir);
+            }
+        }
+
+      function addLogs() {
+		const DIRECTORY_WIN=`C:\\electronProject`
+        var folderName = document.getElementById("folderName").value;
+		createDirectory(DIRECTORY_WIN+"\\"+folderName);
+        var log = document.getElementById("log").value;
+        var datetime = document.getElementById("currdate").value;
+
+		var path = DIRECTORY_WIN+"\\"+folderName+"\\logs.txt";
+
+		var obj = `
+		{
+			"file":"`+log+`",
+			"datetime":"`+new Date().toLocaleString()+`"
+		}
+		`;
+        console.log("sdfghzxcvbn",folderName, log, datetime,obj,JSON.parse(obj));
+
+		fs.appendFile(path,JSON.stringify(JSON.parse(obj))+",", function (err) {
+				if (err) throw err;
+				console.log('Saved!');
+			} );
+
+			fs.readFile(path, 'utf8' , (err, data) => {
+			if (err) {
+				console.error(err)
+				return
+			}
+			var arr = data.split(";");
+			console.log("raed",data,arr)
+			})
+		
+      }
+    </script>
+    <script src="./index.js"></script>
+    <script src="./fileModule.js"></script>
+    <!-- Adding Individual Renderer Process JS File -->
+  </body>
 </html>
